@@ -1,0 +1,431 @@
+:root {
+  --bg: #12151c;
+  --panel: #171b24;
+  --panel-raised: #1d2230;
+  --border: #262c3a;
+  --text: #e7e5de;
+  --text-dim: #8a8f9f;
+  --text-faint: #565c6c;
+
+  --risk-low: #4c9a6a;
+  --risk-medium: #d9a441;
+  --risk-high: #d9634a;
+
+  --font-sans: "IBM Plex Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", "SF Mono", monospace;
+
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--risk-medium);
+  outline-offset: 2px;
+}
+
+.app {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100vh;
+}
+
+/* ── Header ─────────────────────────────────────────────────────────── */
+
+.app-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.app-header h1 {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  margin: 0;
+}
+
+.app-header .subtitle {
+  color: var(--text-faint);
+  font-size: 12px;
+  margin-left: 10px;
+}
+
+.header-status {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+/* ── Layout ─────────────────────────────────────────────────────────── */
+
+.layout {
+  display: grid;
+  grid-template-columns: 220px 1fr 260px;
+  min-height: 0;
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+  }
+  .rail-left,
+  .rail-right {
+    max-height: 220px;
+    overflow-y: auto;
+  }
+}
+
+.rail-left,
+.rail-right {
+  border-right: 1px solid var(--border);
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.rail-right {
+  border-right: none;
+  border-left: 1px solid var(--border);
+}
+
+.rail-heading {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-faint);
+  letter-spacing: 0.04em;
+  margin: 0 0 12px;
+}
+
+/* ── Task list ──────────────────────────────────────────────────────── */
+
+.task-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  border-left: 2px solid transparent;
+  padding: 8px 10px;
+  margin-bottom: 2px;
+  color: var(--text-dim);
+  border-radius: 0;
+}
+
+.task-item:hover {
+  background: var(--panel);
+}
+
+.task-item.active {
+  background: var(--panel-raised);
+  border-left-color: var(--risk-medium);
+  color: var(--text);
+}
+
+.task-item .goal {
+  display: block;
+  font-size: 12.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.task-item .meta {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-top: 4px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--text-faint);
+}
+
+.new-task-btn {
+  width: 100%;
+  background: var(--panel-raised);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 8px 10px;
+  font-size: 12.5px;
+  margin-bottom: 14px;
+}
+
+.new-task-btn:hover {
+  border-color: var(--text-faint);
+}
+
+/* ── Status dot ─────────────────────────────────────────────────────── */
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.dot.low {
+  background: var(--risk-low);
+}
+.dot.medium {
+  background: var(--risk-medium);
+}
+.dot.high {
+  background: var(--risk-high);
+}
+.dot.running {
+  background: var(--risk-medium);
+}
+.dot.completed {
+  background: var(--risk-low);
+}
+.dot.failed {
+  background: var(--risk-high);
+}
+.dot.waiting_approval {
+  background: var(--risk-high);
+}
+
+/* ── Center column ──────────────────────────────────────────────────── */
+
+.center {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.timeline {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 28px;
+}
+
+.empty-state {
+  color: var(--text-faint);
+  font-size: 13px;
+  max-width: 40ch;
+  margin-top: 40px;
+}
+
+.event {
+  display: flex;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.event:last-child {
+  border-bottom: none;
+}
+
+.event-marker {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-faint);
+  width: 76px;
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+
+.event-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.event-goal {
+  font-size: 14.5px;
+  color: var(--text);
+}
+
+.event-tool-name {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--text);
+}
+
+.event-args,
+.event-result {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--text-dim);
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin-top: 4px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  padding: 6px 8px;
+}
+
+.event-final {
+  font-size: 14.5px;
+  white-space: pre-wrap;
+}
+
+.event-error {
+  color: var(--risk-high);
+  font-size: 13px;
+}
+
+.risk-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.02em;
+  padding: 1px 5px;
+  border: 1px solid currentColor;
+  margin-left: 8px;
+}
+
+.risk-tag.low {
+  color: var(--risk-low);
+}
+.risk-tag.medium {
+  color: var(--risk-medium);
+}
+.risk-tag.high {
+  color: var(--risk-high);
+}
+
+/* ── Approval bar ───────────────────────────────────────────────────── */
+
+.approval-bar {
+  border-top: 1px solid var(--risk-high);
+  background: rgba(217, 99, 74, 0.08);
+  padding: 14px 28px;
+}
+
+.approval-bar .heading {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--risk-high);
+  margin-bottom: 6px;
+}
+
+.approval-bar .detail {
+  font-size: 13px;
+  color: var(--text-dim);
+  margin-bottom: 10px;
+}
+
+.approval-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.approval-actions button {
+  padding: 7px 16px;
+  font-size: 13px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+}
+
+.approval-actions .approve {
+  border-color: var(--risk-low);
+  color: var(--risk-low);
+}
+
+.approval-actions .reject {
+  border-color: var(--risk-high);
+  color: var(--risk-high);
+}
+
+.approval-actions button:hover {
+  background: var(--panel-raised);
+}
+
+/* ── Goal input ─────────────────────────────────────────────────────── */
+
+.goal-form {
+  display: flex;
+  gap: 10px;
+  padding: 16px 28px;
+  border-top: 1px solid var(--border);
+}
+
+.goal-form input {
+  flex: 1;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 10px 12px;
+  font-size: 14px;
+  font-family: var(--font-sans);
+}
+
+.goal-form input:focus {
+  border-color: var(--text-faint);
+}
+
+.goal-form button {
+  background: var(--risk-medium);
+  color: #1a1300;
+  border: none;
+  padding: 10px 18px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.goal-form button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ── Tools panel ────────────────────────────────────────────────────── */
+
+.server-group {
+  margin-bottom: 18px;
+}
+
+.server-name {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.server-error {
+  font-size: 11px;
+  color: var(--risk-high);
+  margin: 2px 0 6px;
+}
+
+.tool-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 3px 0;
+  font-size: 11.5px;
+}
+
+.tool-row .name {
+  font-family: var(--font-mono);
+  color: var(--text-dim);
+}
