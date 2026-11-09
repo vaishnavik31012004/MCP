@@ -1,0 +1,29 @@
+fastapi>=0.115,<1.0
+uvicorn[standard]>=0.30,<1.0
+pydantic>=2.9,<3.0
+pydantic-settings>=2.5,<3.0
+python-dotenv>=1.0,<2.0
+httpx>=0.27,<1.0
+# Pinned: aiosqlite>=0.21 dropped the Thread-based Connection API that
+# langgraph-checkpoint-sqlite 2.x's AsyncSqliteSaver.setup() still calls
+# (Connection.is_alive()). Keep these two in lockstep until upgrading both
+# langgraph-checkpoint-sqlite (3.x) and langgraph together.
+aiosqlite==0.20.0
+beautifulsoup4>=4.12,<5.0
+
+# MCP client + servers
+mcp>=1.2,<2.0
+
+# Agent brain
+langchain-core>=0.3,<0.4
+langchain-openai>=0.2,<1.0
+langchain-anthropic>=0.3,<1.0
+langgraph>=0.2.50,<0.3
+langgraph-checkpoint-sqlite==2.0.11
+
+# Long-term memory
+langmem>=0.0.11,<1.0
+# Free, local, no-API-key embeddings backend (default). Pulls in a CPU build
+# of torch on first install — that's the trade-off for $0 embeddings.
+langchain-huggingface==0.1.2
+sentence-transformers>=3.0,<7.0
